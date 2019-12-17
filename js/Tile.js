@@ -130,8 +130,6 @@ export default {
             }
         },
 
-
-
         checkLegalMove2: function(initialPosX, initialPosY, newpPosX, newpPosY ){
             
             if (Math.abs(initialPosX + initialPosY - newpPosX - newpPosY) == 1){
@@ -145,8 +143,6 @@ export default {
         toggleClass3: function(event) {
 
             this.$emit('respondToClick', {x: this.position.x, y: this.position.y})
-
-
         },
         toggleClass2: function(event) {
 

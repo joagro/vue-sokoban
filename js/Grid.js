@@ -19,10 +19,7 @@ export default {
             v-bind:drills="drills"
             v-bind:bombs="bombs"
             v-bind:strengths="strengths"
-            
-            />
-
-        
+            />        
             <div 
             v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
             >
@@ -64,9 +61,9 @@ export default {
             drills: 1,
             bombs: 1,
             strengths: 1,
-            drillActive: false,
-            bombActive: false,
-            strengthActive: false,
+            drillActive: 0,
+            bombActive: 0,
+            strengthActive: 0,
 
 
         }
@@ -80,7 +77,7 @@ export default {
 
         levelMap: function() {
 
-            console.log("computing level map, currentlevel is: " + this.currentlevel + " and totallevels: " + this.listOfLevels.length)
+            //console.log("computing level map, currentlevel is: " + this.currentlevel + " and totallevels: " + this.listOfLevels.length)
 
             if (this.currentlevel == this.listOfLevels.length){
 
@@ -140,11 +137,11 @@ export default {
             deep: true,
 
             handler(){
-                console.log("list of boxes has been updated!")
+                //console.log("list of boxes has been updated!")
                 
                 this.points = this.score()
 
-                console.log("Current score: " + this.points)
+                //console.log("Current score: " + this.points)
 
                 this.targetPoints = this.listOfBoxes.length
 
@@ -179,35 +176,29 @@ export default {
             }
                 //console.log("tile list has been updated")
         },
-
-        testObjectList: {
-            deep: true,
-
-            handler(){
-                console.log("test object list has been updated")
-                //console.log(this.testObjectList[0])
-            }
-        },
     },
     methods: {
         powerUpHandler: function(args){
 
             this.args = args
 
-            console.log(this.args)
-            console.log(this.args.special)
-
             switch(this.args.special) {
                 case "bomb":
                     //console.log("Case1")
                     this.bombActive = true
+                    this.drillActive = false
+                    this.strengthActive = false
                     break
                 case "drill":
                     //console.log("Case2")
+                    this.bombActive = false
                     this.drillActive = true
+                    this.strengthActive = false
                     break
                 case "strength":
                     //console.log("Case3")
+                    this.bombActive = false
+                    this.drillActive = false
                     this.strengthActive = true
                     break
             }
@@ -243,32 +234,26 @@ export default {
 
         drawLevel: function(){
 
-            //console.log("drawlevel running")
-
             this.listOfWalls = []
 
             this.listOfBoxes = []
 
             this.listOfParkingLots = []
             
-
             for(this.row = 0; this.row < this.levelMap.length; this.row++){
                 
                 for(this.col = 0; this.col < this.levelMap[this.row].length;this.col++){
 
-                    //console.log("Y: " + this.row + " X: " + this.col + " " + this.levelMap[this.row][this.col])
-
                     if(this.levelMap[this.row][this.col] === "W"){
 
-                        //console.log("wall has been found")
                         this.listOfWalls.push([this.row, this.col])
                     
                     }else if(this.levelMap[this.row][this.col] === "B"){
-                        console.log("box found row: " + this.row + " column: " +this.col)
+                        //console.log("box found row: " + this.row + " column: " +this.col)
                         this.listOfBoxes.push([this.row, this.col])
 
                     }else if(this.levelMap[this.row][this.col] === "P"){
-                        console.log("parking lot found row: " + this.row + " column: " +this.col)
+                        //console.log("parking lot found row: " + this.row + " column: " +this.col)
                         this.listOfParkingLots.push([this.row, this.col])
 
                     }else if(this.levelMap[this.row][this.col] === "H"){
@@ -276,14 +261,8 @@ export default {
                         this.avatarPosX = this.col
 
                     }
-
-
                 }
-
             }
-            //console.log(this.listOfWalls)
-            //console.log(this.listOfBoxes)
-
         },
 
         score: function(){
@@ -298,13 +277,13 @@ export default {
 
             for (this.i = 0; this.i < this.listOfBoxes.length ; this.i++) {
 
-                console.log(i)
+                //console.log(i)
 
                 for (this.j = 0; this.j < this.listOfParkingLots.length ; this.j++) {
 
                     if(this.listOfBoxes[this.i][0] == this.listOfParkingLots[this.j][0] && this.listOfBoxes[this.i][1] == this.listOfParkingLots[this.j][1]){
 
-                        console.log("Box parked in parking lot at: " + this.listOfParkingLots[this.j][0] + " " +this.listOfParkingLots[this.j][1])
+                        //console.log("Box parked in parking lot at: " + this.listOfParkingLots[this.j][0] + " " +this.listOfParkingLots[this.j][1])
 
                         this.currentScore++
                     }
@@ -312,7 +291,7 @@ export default {
                 }
 
             }
-            console.log(this.currentScore)
+            //console.log(this.currentScore)
             return this.currentScore
 
         },
@@ -353,12 +332,6 @@ export default {
 
         },
         
-        addBox: function(posY, posX) {
-
-            this.listOfBoxes.push([posY, posX])
-
-        },
-
         isBox: function(posY, posX) {
 
             this.posY = posY
@@ -425,7 +398,7 @@ export default {
             if (this.isBox(this.args.y, this.args.x) == true && this.bombActive == true){
 
                 this.removeBox(this.args.y, this.args.x)
-                this.bombActive == false
+                this.bombActive = false
                 this.bomb--
 
             }
@@ -447,24 +420,24 @@ export default {
                 this.newBoxPosY = this.args.y + this.deltaY
                 this.newBoxPosX = this.args.x + this.deltaX
 
-                if (this.isWall(this.newBoxPosY, this.newBoxPosX) == true){
-                    console.log("Wall found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }else {
-                    console.log("No wall found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }
+                //if (this.isWall(this.newBoxPosY, this.newBoxPosX) == true){
+                //    console.log("Wall found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}else {
+                //    console.log("No wall found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}
 
-                if (this.isBox(this.newBoxPosY, this.newBoxPosX) == true){
-                    console.log("box found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }else {
-                    console.log("No box found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }
+                //if (this.isBox(this.newBoxPosY, this.newBoxPosX) == true){
+                //    console.log("box found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}else {
+                //    console.log("No box found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}
 
                 
-                if (this.isFreeSpace(this.newBoxPosY, this.newBoxPosX) == true){
-                    console.log("Free space found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }else {
-                    console.log("Free space found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
-                }
+                //if (this.isFreeSpace(this.newBoxPosY, this.newBoxPosX) == true){
+                //    console.log("Free space found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}else {
+                //    console.log("Free space found at Y: " + this.newBoxPosY + " X: " + this.newBoxPosX)
+                //}
 
                 if (this.checkIfBetween(this.newBoxPosY, 0, this.gridRows) == true 
                     && this.checkIfBetween(this.newBoxPosX, 0, this.gridColumns) == true
@@ -475,10 +448,21 @@ export default {
 
                     this.moveBoxTo(this.args.y, this.args.x, this.newBoxPosY, this.newBoxPosX)
 
+                }else if(this.strengthActive == true &&
+                        this.isFreeSpace(this.newBoxPosY + this.deltaY, this.newBoxPosX+ this.deltaX) == true &&
+                        this.checkIfBetween(this.newBoxPosY + this.deltaY, 0, this.gridRows) == true &&
+                         this.checkIfBetween(this.newBoxPosX, + this.deltaX, this.gridColumns) == true
+                        )
+                        {
+                    //conditions, str active == true, isbox(newpos) == true, isfree(newpost + delta) == true
+
+                    this.moveBoxTo(this.newBoxPosY, this.newBoxPosX, this.newBoxPosY + this.deltaY, this.newBoxPosX + this.deltaX)
+                    this.moveBoxTo(this.args.y, this.args.x, this.newBoxPosY, this.newBoxPosX)
+                    this.strengths--
+                    this.strengthActive == false
+
                 }else{
-                    //pass
-                    //console.log("none or one of the numbers Y: " + this.newBoxPosY + " and X: " + this.newBoxPosX + " are within bounds")
-                    //console.log("Or the space behind is occupied")
+
                 }
                 
             }else if(this.isWall(this.args.y, this.args.x) == false){
@@ -488,7 +472,7 @@ export default {
 
             }else if(this.isWall(this.args.y, this.args.x) == true && this.drillActive == true){
 
-                console.log("drilling")
+                //console.log("drilling")
                 //console.log(this.drillActive)
                 this.removeWall(this.args.y, this.args.x)
                 this.drills--
@@ -505,20 +489,6 @@ export default {
 
         },
 
-        //checkWithinRange: function(yval, xval){
-        //    this.yval = yval
-        //    this.xval = xval
-
-        //    if (x >= 0 && x <= this.gridColumns){
-        //        console.log("variable is within range")
-        //        return true
-        //    }else{
-        //        console.log("variable is out of range")
-        //        return false
-        //    }
-        //
-        //},
-
         createTiles: function(){
 
             this.tiles = []
@@ -532,20 +502,11 @@ export default {
                         y: row,
                     }
                     this.tiles[row].push(position)
-    
                 }
             }
-
         },
-       
     },
     created() {
-        //console.log(this.levelMap)
-
-        //this.addBox(2,2)
-        //console.log(this.listOfBoxes)
-        //console.log(this.levelMap)
-
         this.drawLevel()
         this.createTiles()
 
@@ -555,27 +516,8 @@ export default {
 
 
 
-        //console.log(this.listOfParkingLots.length)
-        //this.$set(this.listOfParkingLots, 0, [5,5])
-        //this.$set(this.listOfParkingLots, 1, [0,5])
-        //this.$set(this.listOfParkingLots, 2, [5,1])
-
-        //this.addBox(2,2)
-        //this.$set(this.listOfBoxes, 0, [1,1])
-        //this.$set(this.listOfBoxes, 1, [2,2])
-        //this.$set(this.listOfBoxes, 2, [3,3])
-        //console.log(this.listOfBoxes)
-
-        //this.$set(this.testObjectList, 3, this.$set(th))
-        //this.drawLevel()
-
-        //console.log(this.listOfWalls)
-        //console.log(this.levelMap)
-
-
     },
     mounted() {
-        //this.drawLevel()
 
     },
 

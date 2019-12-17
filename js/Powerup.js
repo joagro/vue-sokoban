@@ -1,6 +1,6 @@
 export default {
 
-    props: ['drills', 'bombs', 'strengths'],
+    props: ['drills', 'bombs', 'strengths',],
 
     template: `
         <div class="powerup-container">
@@ -27,6 +27,10 @@ export default {
     data() {
         return {
 
+            //v-bind:drillActive="drillActive"
+            //v-bind:bombActive="bombActive"
+            //v-bind:strengthActive="strengthActive"
+
             bomb: "Bomb",
             drill: "Drill",
             strength: "Mega-strength",
@@ -36,7 +40,7 @@ export default {
     computed: { 
         
         bombLabel: function(){
-            return "Bombs: " + this.bombs +"x"
+            return "Bombs: " + this.bombs +"x"   
         },
 
         drillLabel: function(){
@@ -44,7 +48,7 @@ export default {
         },
 
         strengthLabel: function(){
-            return "Bombs: " + this.strengths +"x"
+            return "Potions of strength: " + this.strengths +"x"
         },    
 
     },
@@ -52,18 +56,26 @@ export default {
     methods: {
 
         engagePowerup: function (){
-            //console.log(this.bombs)
-            this.$emit('respondToPowerUp', {special: "bomb"})
+
+            if(this.bombs > 0) {
+                this.$emit('respondToPowerUp', {special: "bomb"})
+            }            
         },
 
         engagePowerup2: function (){
-            //console.log(this.drills)
-            this.$emit('respondToPowerUp', {special: "drill"})
+
+            if(this.drills > 0){
+                this.$emit('respondToPowerUp', {special: "drill"})
+            }
+            
         },
 
         engagePowerup3: function (){
-            //console.log(this.strengths)
-            this.$emit('respondToPowerUp', {special: "strength"})
+
+            if(this.strengths > 0){
+                this.$emit('respondToPowerUp', {special: "strength"})
+            }
+            
         }
 
     },

@@ -94,23 +94,6 @@ export default {
 
         },
 
-        containerSelector: function(){
-
-            console.log("number of tiles per row" + this.testLevels.length)
-
-            if(this.testLevels.length == 10) {
-
-                console.log("10 tile container selected")
-
-                return "grid-layout-10"
-
-            }else if(this.testLevels == 5) {
-                console.log("5 tile container selected")
-
-                return "grid-layout-5"
-            }
-
-        },
 
         flatTiles() {
             return this.tiles.flat()

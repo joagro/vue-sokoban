@@ -42,7 +42,6 @@ export default {
             listOfWalls: [],
 
             testLevels: levels[1],
-            tileSize: 40,
 
         }
     },
@@ -337,8 +336,6 @@ export default {
         },
 
         clickHandler: function(args){
-
-            console.log(this.cssWidth)
 
             //this.drawLevel()
 

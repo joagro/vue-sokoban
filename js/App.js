@@ -7,7 +7,9 @@ export default {
     template: `
     <div id="app">
         <h1>Sokoban</h1>
-        <grid/>
+        <div class ="game-container">
+            <grid/>
+        </div>    
     </div>
     `
 }

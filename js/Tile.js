@@ -88,7 +88,7 @@ export default {
                     return "B"
 
                 }else if(this.isWall == true){
-                    return "B"
+                    return "W"
                 }else{
                     return "O"
                 }

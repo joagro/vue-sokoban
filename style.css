@@ -2,11 +2,20 @@
     box-sizing: border-box;
 }
 
+.game-container {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: darkviolet;
+    width: 420px;
+}
+
 .grid-layout-10 {
     display: flex;
     width: 400px;
     flex-wrap: wrap;
     flex-direction: row;
+    margin: 0 auto;
+    position: relative;
 }
 
 .grid-layout-7 {
@@ -14,6 +23,8 @@
     width: 280px;
     flex-wrap: wrap;
     flex-direction: row;
+    margin: 0 auto;
+    position: relative;
 }
 
 .grid-layout-5 {
@@ -21,12 +32,17 @@
     width: 200px;
     flex-wrap: wrap;
     flex-direction: row;
+    margin: 0 auto;
+    position: relative;
 }
 
 .tile-div {
     width: 40px;
     height: 40px;
-    background-color: grey;
+    /*background-color: grey; */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/floor.png');
 }
 
 .tile-div-red{
@@ -38,17 +54,27 @@
 .tile-div-blue{
     width: 40px;
     height: 40px;
-    background: lightblue;
+    /* background: lightblue; */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/crate.png');
+
   }
 
 .tile-div-green{
     width: 40px;
     height: 40px;
-    background: greenyellow;
+    /* background: greenyellow; */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/parking_spot.png');
 }
 
 .tile-div-brown{
     width: 40px;
     height: 40px;
-    background: brown;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/wall.png');
+    /*background: brown; */
 }

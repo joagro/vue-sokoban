@@ -4,9 +4,9 @@ import { levels } from './levels.js'
 export default {
     components: {
         Tile
-    },
+    }, // <h1> Avatar location: {{avatarPosY}} {{avatarPosX}} </h1>
     template: `<div>
-    <h1> Avatar location: {{avatarPosY}} {{avatarPosX}} </h1>
+   
         <div 
         v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
         >

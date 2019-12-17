@@ -7,7 +7,9 @@ export default {
     },
     template: `<div>
     <h1> Avatar location: {{avatarPosY}} {{avatarPosX}} </h1>
-        <div class="grid-layout">
+        <div 
+        v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
+        >
             <tile
             v-on:respondToClick="clickHandler($event)"
             
@@ -30,31 +32,6 @@ export default {
 
     data() {
         return {
-            //{ backgroundColor: bgColor, width: bgWidth, height: bgHeight }
-
-            //"display:flex; width:{cssWidth} ;flex-wrap:wrap;"
-
-
-            //<div style="width:400px; display:flex; flex-wrap:wrap;">
-
-            //<div style="{ width:cssWidth }, display:flex; flex-wrap:wrap;">
-
-
-            //<div style="{ width:compCSSWidth } display:flex; flex-wrap:wrap;">
-            
-            cssWidth: "400px",
-
-            cssStyle: "width:400px; display:flex; flex-wrap:wrap;",
-
-            cssDisplayFlex: "flex",
-            cssFlexWrap: "wrap",
-
-            //class="grid-layout"
-
-            //display: flex;
-            //width: 400px;
-            //flex-wrap: wrap;
-
             tiles: [],
 
             avatarPosY: 1,
@@ -64,19 +41,76 @@ export default {
             listOfParkingLots: [],
             listOfWalls: [],
 
-            gridRows: 10,
-            gridColumns: 10,
-
-            testLevels: levels[0],
+            testLevels: levels[1],
             tileSize: 40,
 
         }
     },
     computed: {
 
-        gridCSS: function() {
+        is10Long: function(){
 
-            return "display:flex; cssWidth: 400px; flex-wrap:wrap;"
+            if (this.testLevels[0].length == 10) {
+                return true
+            }else{
+                return false
+            }
+
+        },
+
+        is7Long: function(){
+
+            if (this.testLevels[0].length == 7) {
+                return true
+            }else{
+                return false
+            }
+
+        },
+
+        
+        is5Long: function(){
+
+            if (this.testLevels[0].length == 5) {
+                return true
+            }else{
+                return false
+            }
+
+        },
+
+        gridRows: function(){
+
+            console.log("calculating grid rows: " + this.testLevels.length)
+
+            return this.testLevels.length
+
+        },
+
+        gridColumns: function(){
+
+            console.log("calculating grid cols: " + this.testLevels[0].length)
+
+            return this.testLevels[0].length
+
+        },
+
+        containerSelector: function(){
+
+            console.log("number of tiles per row" + this.testLevels.length)
+
+            if(this.testLevels.length == 10) {
+
+                console.log("10 tile container selected")
+
+                return "grid-layout-10"
+
+            }else if(this.testLevels == 5) {
+                console.log("5 tile container selected")
+
+                return "grid-layout-5"
+            }
+
         },
 
         flatTiles() {
@@ -96,19 +130,6 @@ export default {
         //    return this.listOfBoxes
 
         //},
-
-        compCSSWidth: function() {
-
-            console.log("calculating CSS grid")
-
-            console.log(this.tileSize)
-            console.log(this.gridRows)
-
-            return this.tileSize*  this.gridRows +"px"
-        }
-
-
-
     },
 
     watch: {
@@ -421,6 +442,7 @@ export default {
        
     },
     created() {
+        console.log(this.testLevels)
 
         //this.addBox(2,2)
         //console.log(this.listOfBoxes)
@@ -428,8 +450,8 @@ export default {
 
         this.drawLevel()
 
-        this.gridRows = this.testLevels.length
-        this.gridColumns = this.testLevels[0].length
+        //this.gridRows = this.testLevels.length
+        //this.gridColumns = this.testLevels[0].length
         
 
         for(let row = 0; row < this.gridRows; row++){
@@ -444,8 +466,6 @@ export default {
 
             }
         }
-
-        console.log(this.compCSSWidth)
 
         //console.log(this.listOfParkingLots.length)
         //this.$set(this.listOfParkingLots, 0, [5,5])

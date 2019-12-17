@@ -2,10 +2,25 @@
     box-sizing: border-box;
 }
 
-.grid-layout {
+.grid-layout-10 {
     display: flex;
     width: 400px;
     flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.grid-layout-7 {
+    display: flex;
+    width: 280px;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.grid-layout-5 {
+    display: flex;
+    width: 200px;
+    flex-wrap: wrap;
+    flex-direction: row;
 }
 
 .tile-div {

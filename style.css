@@ -36,6 +36,19 @@
     position: relative;
 }
 
+.powerup-button {
+    background-color: floralwhite;
+    flex-grow: 1;
+
+}
+
+.powerup-container {
+    background-color: forestgreen;
+    display: flex;
+    
+    flex-direction: row;
+}
+
 .tile-div {
     width: 40px;
     height: 40px;

@@ -1,15 +1,31 @@
 import Tile from './Tile.js'
+import Powerup from './Powerup.js'
 import { levels } from './levels.js'
 
 export default {
     components: {
-        Tile
+        Tile,
+        Powerup,
     }, // <h1> Avatar location: {{avatarPosY}} {{avatarPosX}} </h1>
+        //            <div
+        //class ="tile-div"
+        //
+        //> dude
+        //</div>
     template: `<div>
-   
-        <div 
-        v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
-        >
+
+            <powerup
+            v-on:respondToPowerUp="powerUpHandler($event)" 
+            v-bind:drills="drills"
+            v-bind:bombs="bombs"
+            v-bind:strengths="strengths"
+            
+            />
+
+        
+            <div 
+            v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
+            >
             <tile
             v-on:respondToClick="clickHandler($event)"
             
@@ -44,6 +60,15 @@ export default {
             listOfLevels: levels,
             //levelMap: levels[0],
 
+            //powerups
+            drills: 1,
+            bombs: 1,
+            strengths: 1,
+            drillActive: false,
+            bombActive: false,
+            strengthActive: false,
+
+
         }
     },
     computed: {
@@ -64,8 +89,6 @@ export default {
             }else{
                 return this.listOfLevels[this.currentlevel]
             }
-
-            
         },
 
         is10Long: function(){
@@ -75,7 +98,6 @@ export default {
             }else{
                 return false
             }
-
         },
 
         is7Long: function(){
@@ -85,7 +107,6 @@ export default {
             }else{
                 return false
             }
-
         },
 
         
@@ -96,25 +117,17 @@ export default {
             }else{
                 return false
             }
-
         },
 
         gridRows: function(){
-
-            console.log("calculating grid rows: " + this.levelMap.length)
-
+            //console.log("calculating grid rows: " + this.levelMap.length)
             return this.levelMap.length
-
         },
 
         gridColumns: function(){
-
-            console.log("calculating grid cols: " + this.levelMap[0].length)
-
+            //console.log("calculating grid cols: " + this.levelMap[0].length)
             return this.levelMap[0].length
-
         },
-
 
         flatTiles() {
             return this.tiles.flat()
@@ -141,14 +154,15 @@ export default {
                         this.currentlevel++
                         //this.currentlevel++
                         this.levelMap= levels[this.currentlevel]
-                        console.log(this.levelMap)
+                        //console.log(this.levelMap)
                         this.drawLevel()
-                        console.log(this.listOfBoxes)
-                        console.log(this.listOfParkingLots)
+                        //console.log(this.listOfBoxes)
+                        //console.log(this.listOfParkingLots)
                         this.createTiles()
                         console.log("Level cleared!")
                     }else{
                         this.currentlevel
+                        console.log("replaying final level")
                     }
 
                     //this.currentlevel++
@@ -176,9 +190,55 @@ export default {
         },
     },
     methods: {
+        powerUpHandler: function(args){
 
-        gridRowPixelLength: function() {
+            this.args = args
 
+            console.log(this.args)
+            console.log(this.args.special)
+
+            switch(this.args.special) {
+                case "bomb":
+                    //console.log("Case1")
+                    this.bombActive = true
+                    break
+                case "drill":
+                    //console.log("Case2")
+                    this.drillActive = true
+                    break
+                case "strength":
+                    //console.log("Case3")
+                    this.strengthActive = true
+                    break
+            }
+        },
+
+        removeWall: function(row, col){
+            this.row = row
+            this.col = col
+
+            for (this.i = 0; this.i < this.listOfWalls.length ; this.i++){
+
+                if(this.listOfWalls[this.i][0] === this.row && this.listOfWalls[this.i][1] === this.col){
+
+                    this.listOfWalls.splice(this.i, 1)
+                    return true
+                }
+            }
+        },
+
+        removeBox: function(row, col){
+            this.row = row
+            this.col = col
+
+            for (this.i = 0; this.i < this.listOfBoxes.length ; this.i++){
+
+                if(this.listOfBoxes[this.i][0] === this.row && this.listOfBoxes[this.i][1] === this.col){
+
+                    this.listOfBoxes.splice(this.i, 1)
+                    return true
+                }
+            }
         },
 
         drawLevel: function(){
@@ -358,13 +418,18 @@ export default {
 
         clickHandler: function(args){
 
-            //this.drawLevel()
-
             this.args = args
 
             //checking tile is occupied by a box
 
-            if (this.isBox(this.args.y, this.args.x)){
+            if (this.isBox(this.args.y, this.args.x) == true && this.bombActive == true){
+
+                this.removeBox(this.args.y, this.args.x)
+                this.bombActive == false
+                this.bomb--
+
+            }
+            if (this.isBox(this.args.y, this.args.x) == true){
                 //console.log("tile is a box")
 
                 //deltaX and deltaY is a unit vector corresponding
@@ -415,12 +480,19 @@ export default {
                     //console.log("none or one of the numbers Y: " + this.newBoxPosY + " and X: " + this.newBoxPosX + " are within bounds")
                     //console.log("Or the space behind is occupied")
                 }
-
-
-            }else{
+                
+            }else if(this.isWall(this.args.y, this.args.x) == false){
                 //console.log("tile is not a box")
                 this.avatarPosY = this.args.y
                 this.avatarPosX = this.args.x
+
+            }else if(this.isWall(this.args.y, this.args.x) == true && this.drillActive == true){
+
+                console.log("drilling")
+                //console.log(this.drillActive)
+                this.removeWall(this.args.y, this.args.x)
+                this.drills--
+                this.drillActive = false
             }
 
         },
@@ -432,31 +504,21 @@ export default {
             }
 
         },
-        //setSpace: function(tileY, tileX){
-        //    console.log("leaving empty space behind!")
-        //    tiles[this.avatarPosY][this.avatarPosX].setAllFalse()
-        //    tiles[this.avatarPosY][this.avatarPosX].isSpace = true
+
+        //checkWithinRange: function(yval, xval){
+        //    this.yval = yval
+        //    this.xval = xval
+
+        //    if (x >= 0 && x <= this.gridColumns){
+        //        console.log("variable is within range")
+        //        return true
+        //    }else{
+        //        console.log("variable is out of range")
+        //        return false
+        //    }
+        //
         //},
 
-        checkWithinRange: function(yval, xval){
-            this.yval = yval
-            this.xval = xval
-
-            if (x >= 0 && x <= this.gridColumns){
-                console.log("variable is within range")
-                return true
-            }else{
-                console.log("variable is out of range")
-                return false
-            }
-
-        },
-        moveAvatar: function(args){
-
-            this.args = args
-            this.avatarPosY = this.args.y
-            this.avatarPosX = this.args.x
-        },
         createTiles: function(){
 
             this.tiles = []

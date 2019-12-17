@@ -40,16 +40,37 @@ export default {
             listOfBoxes: [],
             listOfParkingLots: [],
             listOfWalls: [],
-
-            testLevels: levels[1],
+            currentlevel: 0,
+            listOfLevels: levels,
+            //levelMap: levels[0],
 
         }
     },
     computed: {
 
+        lastLevel: function() {
+
+            return this.listOfLevels.length
+        },
+
+        levelMap: function() {
+
+            console.log("computing level map, currentlevel is: " + this.currentlevel + " and totallevels: " + this.listOfLevels.length)
+
+            if (this.currentlevel == this.listOfLevels.length){
+
+                return this.listOfLevels[this.currentlevel -1]
+
+            }else{
+                return this.listOfLevels[this.currentlevel]
+            }
+
+            
+        },
+
         is10Long: function(){
 
-            if (this.testLevels[0].length == 10) {
+            if (this.levelMap[0].length == 10) {
                 return true
             }else{
                 return false
@@ -59,7 +80,7 @@ export default {
 
         is7Long: function(){
 
-            if (this.testLevels[0].length == 7) {
+            if (this.levelMap[0].length == 7) {
                 return true
             }else{
                 return false
@@ -70,7 +91,7 @@ export default {
         
         is5Long: function(){
 
-            if (this.testLevels[0].length == 5) {
+            if (this.levelMap[0].length == 5) {
                 return true
             }else{
                 return false
@@ -80,17 +101,17 @@ export default {
 
         gridRows: function(){
 
-            console.log("calculating grid rows: " + this.testLevels.length)
+            console.log("calculating grid rows: " + this.levelMap.length)
 
-            return this.testLevels.length
+            return this.levelMap.length
 
         },
 
         gridColumns: function(){
 
-            console.log("calculating grid cols: " + this.testLevels[0].length)
+            console.log("calculating grid cols: " + this.levelMap[0].length)
 
-            return this.testLevels[0].length
+            return this.levelMap[0].length
 
         },
 
@@ -98,20 +119,6 @@ export default {
         flatTiles() {
             return this.tiles.flat()
         },
-        //updateBoxList(oldY, oldX, newY, newX) {
-
-        //    console.log("computing tile list")
-
-        //    for (this.i = 0; this.i < this.listOfBoxes.length ; this.i++) {
-
-        //        if (this.listOfBoxes[this.i][0] == this.oldY && this.listOfBoxes[this.i][1] == this.oldX){
-
-        //            this.listOfBoxes[this.i] = [newY, newX]
-        //        }
-        //    }
-        //    return this.listOfBoxes
-
-        //},
     },
 
     watch: {
@@ -129,7 +136,30 @@ export default {
                 this.targetPoints = this.listOfBoxes.length
 
                 if(this.points == this.targetPoints){
-                    console.log("Level cleared!")
+
+                    if (this.currentlevel < this.lastLevel) {
+                        this.currentlevel++
+                        //this.currentlevel++
+                        this.levelMap= levels[this.currentlevel]
+                        console.log(this.levelMap)
+                        this.drawLevel()
+                        console.log(this.listOfBoxes)
+                        console.log(this.listOfParkingLots)
+                        this.createTiles()
+                        console.log("Level cleared!")
+                    }else{
+                        this.currentlevel
+                    }
+
+                    //this.currentlevel++
+                    //this.levelMap= levels[this.currentlevel]
+                    //console.log(this.levelMap)
+                    //this.drawLevel()
+                    //console.log(this.listOfBoxes)
+                    //console.log(this.listOfParkingLots)
+                    //this.createTiles()
+                    //console.log("Level cleared!")
+
                 }
 
             }
@@ -154,26 +184,34 @@ export default {
         drawLevel: function(){
 
             //console.log("drawlevel running")
+
+            this.listOfWalls = []
+
+            this.listOfBoxes = []
+
+            this.listOfParkingLots = []
             
 
-            for(this.row = 0; this.row < this.testLevels.length; this.row++){
+            for(this.row = 0; this.row < this.levelMap.length; this.row++){
                 
-                for(this.col = 0; this.col < this.testLevels[this.row].length;this.col++){
+                for(this.col = 0; this.col < this.levelMap[this.row].length;this.col++){
 
-                    //console.log("Y: " + this.row + " X: " + this.col + " " + this.testLevels[this.row][this.col])
+                    //console.log("Y: " + this.row + " X: " + this.col + " " + this.levelMap[this.row][this.col])
 
-                    if(this.testLevels[this.row][this.col] === "W"){
+                    if(this.levelMap[this.row][this.col] === "W"){
 
                         //console.log("wall has been found")
                         this.listOfWalls.push([this.row, this.col])
                     
-                    }else if(this.testLevels[this.row][this.col] === "B"){
+                    }else if(this.levelMap[this.row][this.col] === "B"){
+                        console.log("box found row: " + this.row + " column: " +this.col)
                         this.listOfBoxes.push([this.row, this.col])
 
-                    }else if(this.testLevels[this.row][this.col] === "P"){
+                    }else if(this.levelMap[this.row][this.col] === "P"){
+                        console.log("parking lot found row: " + this.row + " column: " +this.col)
                         this.listOfParkingLots.push([this.row, this.col])
 
-                    }else if(this.testLevels[this.row][this.col] === "H"){
+                    }else if(this.levelMap[this.row][this.col] === "H"){
                         this.avatarPosY = this.row
                         this.avatarPosX = this.col
 
@@ -419,33 +457,41 @@ export default {
             this.avatarPosY = this.args.y
             this.avatarPosX = this.args.x
         },
+        createTiles: function(){
+
+            this.tiles = []
+
+            for(let row = 0; row < this.gridRows; row++){
+                this.tiles[row] = []
+                
+                for(let col = 0; col < this.gridColumns; col++){
+                    let position = {
+                        x: col,
+                        y: row,
+                    }
+                    this.tiles[row].push(position)
+    
+                }
+            }
+
+        },
        
     },
     created() {
-        console.log(this.testLevels)
+        //console.log(this.levelMap)
 
         //this.addBox(2,2)
         //console.log(this.listOfBoxes)
-        //console.log(this.testLevels)
+        //console.log(this.levelMap)
 
         this.drawLevel()
+        this.createTiles()
 
-        //this.gridRows = this.testLevels.length
-        //this.gridColumns = this.testLevels[0].length
+        //this.gridRows = this.levelMap.length
+        //this.gridColumns = this.levelMap[0].length
         
 
-        for(let row = 0; row < this.gridRows; row++){
-            this.tiles[row] = []
-            
-            for(let col = 0; col < this.gridColumns; col++){
-                let position = {
-                    x: col,
-                    y: row,
-                }
-                this.tiles[row].push(position)
 
-            }
-        }
 
         //console.log(this.listOfParkingLots.length)
         //this.$set(this.listOfParkingLots, 0, [5,5])
@@ -462,7 +508,7 @@ export default {
         //this.drawLevel()
 
         //console.log(this.listOfWalls)
-        //console.log(this.testLevels)
+        //console.log(this.levelMap)
 
 
     },

@@ -6,7 +6,7 @@ export default {
     },
     template: `
     <div id="app">
-        <h1 text-align="center">Sokoban</h1>
+        <h1 style="text-align:center">Sokoban</h1>
         <div class ="game-container">
             <grid/>
         </div>    

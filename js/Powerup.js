@@ -26,14 +26,6 @@ export default {
     `,
     data() {
         return {
-
-            //v-bind:drillActive="drillActive"
-            //v-bind:bombActive="bombActive"
-            //v-bind:strengthActive="strengthActive"
-
-            bomb: "Bomb",
-            drill: "Drill",
-            strength: "Mega-strength",
         }
     },
 

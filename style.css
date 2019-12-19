@@ -5,8 +5,17 @@
 .game-container {
     margin-left: auto;
     margin-right: auto;
-    background-color: black;
-    width: 420px;
+    background-color: gray;
+    width: 500px;
+}
+
+.grid-layout-12 {
+    display: flex;
+    width: 480px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin: 0 auto;
+    position: relative;
 }
 
 .grid-layout-10 {
@@ -43,7 +52,7 @@
 }
 
 .powerup-container {
-    background-color: forestgreen;
+    /*background-color: forestgreen; */
     display: flex;
     
     flex-direction: row;

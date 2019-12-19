@@ -6,21 +6,21 @@
     margin-left: auto;
     margin-right: auto;
     background-color: gray;
-    width: 500px;
+    width: 380px;
 }
 
-.grid-layout-12 {
+.grid-layout-9 {
     display: flex;
-    width: 480px;
+    width: 360px;
     flex-wrap: wrap;
     flex-direction: row;
     margin: 0 auto;
     position: relative;
 }
 
-.grid-layout-10 {
+.grid-layout-8 {
     display: flex;
-    width: 400px;
+    width: 320px;
     flex-wrap: wrap;
     flex-direction: row;
     margin: 0 auto;

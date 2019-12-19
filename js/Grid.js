@@ -16,7 +16,11 @@ export default {
             v-bind:strengths="strengths"
             />        
             <div 
-            v-bind:class="{'grid-layout-10': is10Long, 'grid-layout-7': is7Long, 'grid-layout-5': is5Long}"
+            v-bind:class="{
+                'grid-layout-9': is9Long, 
+                'grid-layout-8': is8Long, 
+                'grid-layout-7': is7Long, 
+                'grid-layout-5': is5Long,}"
             >
             <tile
             v-on:respondToClick="clickHandler($event)"
@@ -82,18 +86,18 @@ export default {
             }
         },
 
-        is12Long: function(){
+        is9Long: function(){
 
-            if (this.levelMap[0].length == 12) {
+            if (this.levelMap[0].length == 9) {
                 return true
             }else{
                 return false
             }
         },
 
-        is10Long: function(){
+        is8Long: function(){
 
-            if (this.levelMap[0].length == 10) {
+            if (this.levelMap[0].length == 8) {
                 return true
             }else{
                 return false

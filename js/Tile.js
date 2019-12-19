@@ -86,9 +86,6 @@ export default {
                 else if(this.isSpace == true){
                     return 'tile-div'
                 }
-                else{
-                    console.log("Error in tile selection")
-                }
             },
         },
     },

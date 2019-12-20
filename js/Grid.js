@@ -138,6 +138,12 @@ export default {
     watch: {
 
         listOfBoxes: {
+
+            /* This watcher keeps an eye of when a box is moved, 
+            for the reason of keeping track of how many of the level's
+            boxes that are placed on parking lots, 
+            when all boxes are on parking lots, the next level is loaded
+            if it is the final level, it is reloaded*/
             deep: true,
 
             handler(){
@@ -213,6 +219,10 @@ export default {
         },
         drawLevel: function(){
 
+            /*loops through the 2D list corresponding to the game board and then adds the each tile to it's corresponding list.
+
+            */
+
             this.listOfWalls = []
 
             this.listOfBoxes = []
@@ -242,6 +252,8 @@ export default {
             }
         },
         score: function(){
+
+            //this function calculates how many boxes there are that are placed into parking lots.
 
             this.currentScore = 0
 
@@ -311,7 +323,6 @@ export default {
 
             for (this.i = 0; this.i < this.listOfWalls.length ; this.i++){
 
-
                 if(this.listOfWalls[this.i][0] === this.posY && this.listOfWalls[this.i][1] === this.posX){
                     return true
                 }
@@ -321,6 +332,8 @@ export default {
         },
 
         isFreeSpace: function(posY, posX) {
+
+            //free space is defined as any space  that is not a wall or a box
 
             this.posY = posY
             this.posX = posX
@@ -344,7 +357,6 @@ export default {
                 this.removeBox(this.args.y, this.args.x)
                 this.bombActive = false
                 this.bombs--
-                //console.log(this.)
 
             }
             else if (this.isBox(this.args.y, this.args.x) == true){
@@ -359,7 +371,6 @@ export default {
                 /*newBoxPosY and newBoxPosX is the location coordinates
                  for the space right behind the box from the perspective
                  of the avatar
-
                 */
 
                 this.newBoxPosY = this.args.y + this.deltaY
@@ -370,7 +381,8 @@ export default {
                     && this.checkIfBetween(this.newBoxPosX, 0, this.gridColumns) == true
                     && this.isFreeSpace(this.newBoxPosY, this.newBoxPosX) == true){
 
-
+                        /*these conditions check if the suggested new position is not out of bounds and is a free space
+                        if this is true, the box is moved and the avatar moves into it's place*/
 
                     this.moveBoxTo(this.args.y, this.args.x, this.newBoxPosY, this.newBoxPosX)
                     this.avatarPosY = this.args.y
@@ -382,7 +394,7 @@ export default {
                          this.checkIfBetween(this.newBoxPosX, + this.deltaX, this.gridColumns) == true
                         )
                         {
-                    //conditions, str active == true, isbox(newpos) == true, isfree(newpost + delta) == true
+                    // same conditions as above, just that it checks if the potion of strength has been activated
 
                     this.moveBoxTo(this.newBoxPosY, this.newBoxPosX, this.newBoxPosY + this.deltaY, this.newBoxPosX + this.deltaX)
                     this.moveBoxTo(this.args.y, this.args.x, this.newBoxPosY, this.newBoxPosX)
@@ -396,6 +408,9 @@ export default {
                 }
                 
             }else if(this.isWall(this.args.y, this.args.x) == false){
+
+                //since this means that the tile is just free space, move the avatar to the new position
+                
                 this.avatarPosY = this.args.y
                 this.avatarPosX = this.args.x
 

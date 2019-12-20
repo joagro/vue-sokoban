@@ -15,7 +15,8 @@ export default {
         }
     },
     computed: {
-        
+            
+            //all these computed methods are used to decide which css class the tile will display, hero, wall, box or parking lot
         isHero: function() {
 
             if(this.avatarPosY == this.position.y && this.avatarPosX == this.position.x){
@@ -90,6 +91,8 @@ export default {
         },
     },
     methods: {
+
+        //this function makes sure that the avatar is only moved one unit of space in the horizontal or vertical direction per click
 
         checkLegalMove: function(initialPosY, initialPosX, newpPosY, newpPosX ){
             
